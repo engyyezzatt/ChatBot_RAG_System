@@ -1,0 +1,138 @@
+#!/usr/bin/env python3
+"""
+Setup script for Chatbot RAG System
+This script helps set up the Python environment and install dependencies.
+"""
+
+import os
+import sys
+import subprocess
+import venv
+from pathlib import Path
+
+def run_command(command, cwd=None):
+    """Run a command and return the result."""
+    try:
+        result = subprocess.run(command, shell=True, check=True, capture_output=True, text=True, cwd=cwd)
+        return result.stdout
+    except subprocess.CalledProcessError as e:
+        print(f"Error running command '{command}': {e}")
+        print(f"Error output: {e.stderr}")
+        return None
+
+def create_virtual_environment():
+    """Create a virtual environment if it doesn't exist."""
+    venv_path = Path("PythonBackend/ragsystem_env")
+    
+    if venv_path.exists():
+        print("Virtual environment already exists.")
+        return True
+    
+    print("Creating virtual environment...")
+    try:
+        venv.create("PythonBackend/ragsystem_env", with_pip=True)
+        print("Virtual environment created successfully.")
+        return True
+    except Exception as e:
+        print(f"Error creating virtual environment: {e}")
+        return False
+
+def install_requirements():
+    """Install Python requirements."""
+    print("Installing Python requirements...")
+    
+    # Determine the pip command based on the OS
+    if os.name == 'nt':  # Windows
+        pip_cmd = "PythonBackend\\ragsystem_env\\Scripts\\pip"
+    else:  # Unix/Linux/macOS
+        pip_cmd = "PythonBackend/ragsystem_env/bin/pip"
+    
+    requirements_file = "PythonBackend/requirements.txt"
+    
+    if not os.path.exists(requirements_file):
+        print(f"Requirements file not found: {requirements_file}")
+        return False
+    
+    result = run_command(f"{pip_cmd} install -r {requirements_file}")
+    if result:
+        print("Requirements installed successfully.")
+        return True
+    else:
+        print("Failed to install requirements.")
+        return False
+
+def create_env_file():
+    """Create a sample .env file if it doesn't exist."""
+    env_file = Path("PythonBackend/.env")
+    
+    if env_file.exists():
+        print(".env file already exists.")
+        return True
+    
+    print("Creating sample .env file...")
+    env_content = """# Environment variables for Chatbot RAG System
+# Replace these values with your actual configuration
+
+# OpenAI API Key (required for LLM functionality)
+OPENAI_API_KEY=your_openai_api_key_here
+
+# Database connection string (optional, for additional features)
+DATABASE_URL=your_database_connection_string_here
+
+# Model configuration
+MODEL_NAME=gpt-3.5-turbo
+TEMPERATURE=0.7
+MAX_TOKENS=1000
+
+# Vector store configuration
+VECTOR_STORE_PATH=./vector_store
+CHUNK_SIZE=1000
+CHUNK_OVERLAP=200
+"""
+    
+    try:
+        with open(env_file, 'w') as f:
+            f.write(env_content)
+        print("Sample .env file created. Please update it with your actual configuration.")
+        return True
+    except Exception as e:
+        print(f"Error creating .env file: {e}")
+        return False
+
+def main():
+    """Main setup function."""
+    print("🚀 Setting up Chatbot RAG System...")
+    print("=" * 50)
+    
+    # Check if we're in the right directory
+    if not os.path.exists("PythonBackend"):
+        print("Error: Please run this script from the project root directory.")
+        sys.exit(1)
+    
+    # Create virtual environment
+    if not create_virtual_environment():
+        sys.exit(1)
+    
+    # Install requirements
+    if not install_requirements():
+        sys.exit(1)
+    
+    # Create .env file
+    create_env_file()
+    
+    print("\n" + "=" * 50)
+    print("✅ Setup completed successfully!")
+    print("\nNext steps:")
+    print("1. Update PythonBackend/.env with your OpenAI API key")
+    print("2. Start the Python backend:")
+    print("   cd PythonBackend")
+    print("   ragsystem_env\\Scripts\\activate  # Windows")
+    print("   source ragsystem_env/bin/activate  # macOS/Linux")
+    print("   uvicorn app.main:app --reload --host 0.0.0.0 --port 8000")
+    print("3. Start the .NET API:")
+    print("   cd ChatbotAPI")
+    print("   dotnet run")
+    print("\nFor more information, see README.md")
+
+if __name__ == "__main__":
+    main() 
