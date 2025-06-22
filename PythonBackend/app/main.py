@@ -121,7 +121,7 @@ async def health_endpoint():
             detail=f"Health check failed: {str(e)}"
         )
 
-@app.get("/")
+@app.get("/info")
 async def root():
     """Root endpoint with basic info."""
     return {
