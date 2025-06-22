@@ -31,4 +31,7 @@ public class PythonHealthResponse
     
     [JsonPropertyName("vector_store_status")]
     public string VectorStoreStatus { get; set; } = string.Empty;
+    
+    [JsonPropertyName("error")]
+    public string? Error { get; set; }
 } 
