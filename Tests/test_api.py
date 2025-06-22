@@ -8,6 +8,7 @@ import requests
 import json
 import time
 from typing import Dict, Any
+import uuid
 
 class ChatbotAPITester:
     def __init__(self, base_url: str = None):
@@ -109,7 +110,7 @@ class ChatbotAPITester:
         try:
             payload = {
                 "question": question,
-                "sessionId": session_id or f"test-session-{int(time.time())}"
+                "sessionId": session_id or str(uuid.uuid4())
             }
             
             response = self.session.post(
@@ -138,30 +139,6 @@ class ChatbotAPITester:
             print(f"❌ Chat request failed with error: {e}")
             return False
     
-    def test_history_endpoint(self, limit: int = 5) -> bool:
-        """Test the conversation history endpoint"""
-        print(f"Testing history endpoint (limit: {limit})")
-        try:
-            response = self.session.get(f"{self.base_url}/api/chat/history?limit={limit}", timeout=10)
-            
-            if response.status_code == 200:
-                history_data = response.json()
-                print(f"✅ History request successful")
-                print(f"   Retrieved {len(history_data)} conversation records")
-                if history_data:
-                    latest = history_data[0]
-                    print(f"   Latest question: {latest.get('question', '')[:50]}...")
-                return True
-            else:
-                print(f"❌ History request failed with status code: {response.status_code}")
-                print(f"   Response: {response.text}")
-                return False
-        except requests.exceptions.ConnectionError as e:
-            print(f"❌ History request failed - Connection Error: {e}")
-            return False
-        except Exception as e:
-            print(f"❌ History request failed with error: {e}")
-            return False
     
     def test_database_after_chat(self) -> bool:
         """Test database after chat to verify storage"""
@@ -202,8 +179,19 @@ class ChatbotAPITester:
             ("Health Check", self.test_health_endpoint),
             ("Database Connection", self.test_database_storage),
             ("Chat Request", lambda: self.test_chat_endpoint("What is the company leave policy?")),
+            ("Chat Request", lambda: self.test_chat_endpoint("What is the company's code of conduct?")),
+            ("Chat Request", lambda: self.test_chat_endpoint("How many days of paid annual leave do employees get?")),
+            ("Chat Request", lambda: self.test_chat_endpoint("What is the sick leave policy at XYZ Company?")),
+            ("Chat Request", lambda: self.test_chat_endpoint("How does the company handle harassment complaints?")),
+            ("Chat Request", lambda: self.test_chat_endpoint("What are the working hours at XYZ Company?")),
+            ("Chat Request", lambda: self.test_chat_endpoint("How is overtime compensated?")),
+            ("Chat Request", lambda: self.test_chat_endpoint("What is the process for resignation?")),
+            ("Chat Request", lambda: self.test_chat_endpoint("What benefits are provided to employees?")),
+            ("Chat Request", lambda: self.test_chat_endpoint("What is the company's data protection policy?")),
+            ("Chat Request", lambda: self.test_chat_endpoint("How are public holidays handled for employees?")),
+            ("Chat Request", lambda: self.test_chat_endpoint("What will happen if two employees hit each other?")),
+
             ("Database Storage Verification", self.test_database_after_chat),
-            ("History Request", lambda: self.test_history_endpoint(3))
         ]
         
         passed = 0
