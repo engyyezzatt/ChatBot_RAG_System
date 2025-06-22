@@ -58,9 +58,6 @@ This project includes a setup script to automate the Python environment creation
     python setup.py
     ```
 
-3.  **Configure Environment Variables**
-    After the setup script runs, edit the new `PythonBackend/.env` file and add your OpenAI API key:
-
 ```bash
 cd PythonBackend
 

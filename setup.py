@@ -61,44 +61,6 @@ def install_requirements():
         print("Failed to install requirements.")
         return False
 
-def create_env_file():
-    """Create a sample .env file if it doesn't exist."""
-    env_file = Path("PythonBackend/.env")
-    
-    if env_file.exists():
-        print(".env file already exists.")
-        return True
-    
-    print("Creating sample .env file...")
-    env_content = """# Environment variables for Chatbot RAG System
-# Replace these values with your actual configuration
-
-# OpenAI API Key (required for LLM functionality)
-OPENAI_API_KEY=your_openai_api_key_here
-
-# Database connection string (optional, for additional features)
-DATABASE_URL=your_database_connection_string_here
-
-# Model configuration
-MODEL_NAME=gpt-3.5-turbo
-TEMPERATURE=0.7
-MAX_TOKENS=1000
-
-# Vector store configuration
-VECTOR_STORE_PATH=./vector_store
-CHUNK_SIZE=1000
-CHUNK_OVERLAP=200
-"""
-    
-    try:
-        with open(env_file, 'w') as f:
-            f.write(env_content)
-        print("Sample .env file created. Please update it with your actual configuration.")
-        return True
-    except Exception as e:
-        print(f"Error creating .env file: {e}")
-        return False
-
 def main():
     """Main setup function."""
     print("🚀 Setting up Chatbot RAG System...")
@@ -116,9 +78,6 @@ def main():
     # Install requirements
     if not install_requirements():
         sys.exit(1)
-    
-    # Create .env file
-    create_env_file()
     
     print("\n" + "=" * 50)
     print("✅ Setup completed successfully!")
