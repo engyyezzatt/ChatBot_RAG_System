@@ -55,7 +55,6 @@ public class ChatController : ControllerBase
         }
     }
 
-
     /// <summary>
     /// Test database connection and get database statistics
     /// </summary>
