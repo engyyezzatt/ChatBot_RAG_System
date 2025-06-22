@@ -24,6 +24,7 @@ class ChatbotAPITester:
         self.session.verify = False
         import urllib3
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+        self.session_id = str(uuid.uuid4())  # Single session for all requests
     
     def _detect_api_url(self) -> str:
         """Try to detect the correct API URL"""
@@ -110,7 +111,7 @@ class ChatbotAPITester:
         try:
             payload = {
                 "question": question,
-                "sessionId": session_id or str(uuid.uuid4())
+                "sessionId": session_id or self.session_id
             }
             
             response = self.session.post(
@@ -178,18 +179,18 @@ class ChatbotAPITester:
         tests = [
             ("Health Check", self.test_health_endpoint),
             ("Database Connection", self.test_database_storage),
-            ("Chat Request", lambda: self.test_chat_endpoint("What is the company leave policy?")),
-            ("Chat Request", lambda: self.test_chat_endpoint("What is the company's code of conduct?")),
-            ("Chat Request", lambda: self.test_chat_endpoint("How many days of paid annual leave do employees get?")),
-            ("Chat Request", lambda: self.test_chat_endpoint("What is the sick leave policy at XYZ Company?")),
-            ("Chat Request", lambda: self.test_chat_endpoint("How does the company handle harassment complaints?")),
-            ("Chat Request", lambda: self.test_chat_endpoint("What are the working hours at XYZ Company?")),
-            ("Chat Request", lambda: self.test_chat_endpoint("How is overtime compensated?")),
-            ("Chat Request", lambda: self.test_chat_endpoint("What is the process for resignation?")),
-            ("Chat Request", lambda: self.test_chat_endpoint("What benefits are provided to employees?")),
-            ("Chat Request", lambda: self.test_chat_endpoint("What is the company's data protection policy?")),
-            ("Chat Request", lambda: self.test_chat_endpoint("How are public holidays handled for employees?")),
-            ("Chat Request", lambda: self.test_chat_endpoint("What will happen if two employees hit each other?")),
+            ("Chat Request", lambda: self.test_chat_endpoint("What is the company leave policy?", self.session_id)),
+            ("Chat Request", lambda: self.test_chat_endpoint("What is the company's code of conduct?", self.session_id)),
+            ("Chat Request", lambda: self.test_chat_endpoint("How many days of paid annual leave do employees get?", self.session_id)),
+            ("Chat Request", lambda: self.test_chat_endpoint("What is the sick leave policy at XYZ Company?", self.session_id)),
+            ("Chat Request", lambda: self.test_chat_endpoint("How does the company handle harassment complaints?", self.session_id)),
+            ("Chat Request", lambda: self.test_chat_endpoint("What are the working hours at XYZ Company?", self.session_id)),
+            ("Chat Request", lambda: self.test_chat_endpoint("How is overtime compensated?", self.session_id)),
+            ("Chat Request", lambda: self.test_chat_endpoint("What is the process for resignation?", self.session_id)),
+            ("Chat Request", lambda: self.test_chat_endpoint("What benefits are provided to employees?", self.session_id)),
+            ("Chat Request", lambda: self.test_chat_endpoint("What is the company's data protection policy?", self.session_id)),
+            ("Chat Request", lambda: self.test_chat_endpoint("How are public holidays handled for employees?", self.session_id)),
+            ("Chat Request", lambda: self.test_chat_endpoint("What will happen if two employees hit each other?", self.session_id)),
 
             ("Database Storage Verification", self.test_database_after_chat),
         ]
