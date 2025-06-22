@@ -1,64 +1,65 @@
 # Chatbot RAG System
 
-A comprehensive Retrieval-Augmented Generation (RAG) chatbot system built with .NET Core API and Python backend, featuring document processing, vector storage, and intelligent query responses.
+A Retrieval-Augmented Generation (RAG) chatbot system built with a .NET API and a Python backend. This project uses local policy documents to provide context-aware answers to user questions.
 
-## 🚀 Features
+## 🚀 Core Features
 
-- **Dual Backend Architecture**: .NET Core API for web interface + Python backend for RAG processing
-- **Document Processing**: Automatic ingestion and processing of HR policy documents
-- **Vector Storage**: ChromaDB-based vector database for efficient document retrieval
-- **Intelligent Responses**: Context-aware responses using LangChain and OpenAI
-- **RESTful API**: Clean API endpoints for chat interactions
-- **Database Integration**: SQL Server database for conversation history
-- **Comprehensive Testing**: Unit tests for both API and Python backend
+-   **.NET 8 Web API**: Handles user interactions, session management, and database storage.
+-   **Python & FastAPI Backend**: Powers the core RAG logic using LangChain and an LLM.
+-   **SQLite Database**: Stores conversation history for easy retrieval and review.
+-   **Vector Storage**: Uses ChromaDB to store document embeddings for efficient retrieval.
+-   **Automated Setup**: Includes scripts to simplify environment setup.
+-   **Comprehensive Testing**: Contains scripts to test the API, backend, and view the database.
 
 ## 📁 Project Structure
 
 ```
 Chatbot_RAG_System/
-├── ChatbotAPI/                 # .NET Core Web API
-│   ├── Controllers/            # API endpoints
-│   ├── Services/              # Business logic services
-│   ├── Models/                # Data models
-│   ├── DTOs/                  # Data transfer objects
-│   └── Data/                  # Database context
-├── PythonBackend/             # Python RAG backend
-│   ├── app/                   # Main application
-│   │   ├── services/          # RAG and document processing
-│   │   ├── models/            # Pydantic schemas
-│   │   └── config/            # Configuration settings
-│   ├── docs/                  # Sample HR policy documents
-│   └── requirements.txt       # Python dependencies
-├── Database/                  # SQL database scripts
-├── Tests/                     # Test files
-└── README.md                  # This file
+├── ChatbotAPI/         # .NET Web API
+│   ├── Controllers/
+│   ├── Data/           # DbContext for SQLite
+│   ├── Models/         # C# data models
+│   ├── Services/
+│   └── Program.cs      # App startup and configuration
+├── Database/           # Contains the SQLite database file
+│   └── ChatbotDB.db    # (created automatically on first run)
+├── PythonBackend/      # Python RAG backend
+│   ├── app/            # FastAPI application
+│   ├── docs/           # Source documents for the RAG system
+│   └── vector_store/   # ChromaDB vector storage
+├── Tests/                # Python test and utility scripts
+│   ├── test_api.py
+│   ├── test_python_backend.py
+│   └── view_database.py
+├── setup.py            # Python environment setup script
+└── README.md
 ```
 
 ## 🛠️ Prerequisites
 
-- **.NET 9.0 SDK**
-- **Python 3.11+**
-- **SQL Server** (or SQL Server Express)
-- **Git**
+-   .NET 8 SDK (or later)
+-   Python 3.11 (or later)
+-   Git
 
-## 📦 Installation
+## 📦 Installation & Setup
 
-### 1. Clone the Repository
+This project includes a setup script to automate the Python environment creation.
 
-```bash
-git clone https://github.com/yourusername/Chatbot_RAG_System.git
-cd Chatbot_RAG_System
-```
+1.  **Clone the Repository**
+    ```bash
+    git clone https://github.com/yourusername/Chatbot_RAG_System.git
+    cd Chatbot_RAG_System
+    ```
 
-### 2. Setup .NET API
+2.  **Run the Python Setup Script**
+    This script will create a virtual environment, install dependencies, and generate a `.env` file for you.
 
-```bash
-cd ChatbotAPI
-dotnet restore
-dotnet build
-```
+    ```bash
+    python setup.py
+    ```
 
-### 3. Setup Python Backend
+3.  **Configure Environment Variables**
+    After the setup script runs, edit the new `PythonBackend/.env` file and add your OpenAI API key:
 
 ```bash
 cd PythonBackend
@@ -76,235 +77,66 @@ source ragsystem_env/bin/activate
 pip install -r requirements.txt
 ```
 
-### 4. Database Setup
+4.  **Build the .NET API**
+    This step prepares the C# project.
 
-1. Create a SQL Server database
-2. Update connection string in `ChatbotAPI/appsettings.json`
-3. Run the database migration:
-   ```bash
-   cd ChatbotAPI
-   dotnet ef database update
-   ```
-
-### 5. Environment Configuration
-
-Create environment files for sensitive data:
-
-**Python Backend** (`.env` file in `PythonBackend/`):
-```env
-OPENAI_API_KEY=your_openai_api_key_here
-DATABASE_URL=your_database_connection_string
-```
-
-**C# API** (update `appsettings.json`):
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "your_database_connection_string"
-  },
-  "PythonBackendUrl": "http://localhost:8000"
-}
-```
+    ```bash
+    cd ChatbotAPI
+    dotnet build
+    cd ..
+    ```
 
 ## 🚀 Running the Application
 
-### 1. Start Python Backend
+Both the Python backend and the .NET API must be running for the system to work.
 
-```bash
-cd PythonBackend
-# Activate virtual environment first
-ragsystem_env\Scripts\activate  # Windows
-# source ragsystem_env/bin/activate  # macOS/Linux
+1.  **Start the Python Backend**
+    This service handles the AI-powered chat logic.
 
-# Start the FastAPI server
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-```
+    ```bash
+    cd PythonBackend
+    # Activate virtual environment
+    # On Windows:
+    ragsystem_env\Scripts\activate
+    # On macOS/Linux:
+    source ragsystem_env/bin/activate
 
-### 2. Start .NET API
+    # Start the FastAPI server
+    uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+    ```
+    The backend will automatically process the documents in `PythonBackend/docs` and create a vector store.
 
-```bash
-cd ChatbotAPI
-dotnet run
-```
+2.  **Start the .NET API**
+    In a **new terminal**, navigate to the API directory and run the application.
 
-The API will be available at `https://localhost:7001` (or the configured port).
+    ```bash
+    cd ChatbotAPI
+    dotnet run
+    ```
+    The API will be available at `http://localhost:5001`. The SQLite database file (`ChatbotDB.db`) will be created automatically in the `Database` directory the first time the API starts.
 
-## 📚 API Usage
+## 🧪 Testing & Verification
 
-### Chat Endpoint
+The `Tests` directory contains scripts to verify that the system is working correctly.
 
-**POST** `/api/chat`
+-   **Test the Full System**:
+    Run `Tests/test_api.py` to perform an end-to-end test that sends a message to the .NET API, which then calls the Python backend.
+    ```bash
+    python Tests/test_api.py
+    ```
 
-Request body:
-```json
-{
-  "message": "What is the company's vacation policy?",
-  "userId": "user123"
-}
-```
-
-Response:
-```json
-{
-  "response": "Based on our HR policies, employees are entitled to...",
-  "timestamp": "2024-01-15T10:30:00Z",
-  "userId": "user123"
-}
-```
-
-### Health Check
-
-**GET** `/api/health`
-
-Returns the health status of both the API and Python backend.
-
-## 🧪 Testing
-
-### Run .NET Tests
-```bash
-cd ChatbotAPI
-dotnet test
-```
-
-### Run Python Tests
-```bash
-cd PythonBackend
-# Activate virtual environment first
-python -m pytest
-```
-
-## 🔧 Configuration
-
-### Python Backend Settings
-
-Edit `PythonBackend/app/config/settings.py` to configure:
-- Model parameters
-- Vector store settings
-- API endpoints
-
-### .NET API Settings
-
-Edit `ChatbotAPI/appsettings.json` to configure:
-- Database connection
-- Python backend URL
-- Logging settings
-
-## 📝 Adding Documents
-
-1. Place your documents in the `PythonBackend/docs/` directory
-2. Supported formats: `.txt`, `.pdf`, `.docx`
-3. The system will automatically process and index new documents
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🆘 Support
-
-If you encounter any issues:
-
-1. Check the [Issues](https://github.com/yourusername/Chatbot_RAG_System/issues) page
-2. Create a new issue with detailed information
-3. Include error logs and system information
-
-## 🔄 Updates
-
-- **v1.0.0**: Initial release with basic RAG functionality
-- **v1.1.0**: Added comprehensive testing suite
-- **v1.2.0**: Enhanced document processing and vector storage
-
----
-
-**Note**: Make sure to never commit sensitive information like API keys or database credentials. Use environment variables and `.env` files for configuration.
+-   **View Database Contents**:
+    Run `Tests/view_database.py` to inspect the queries and responses stored in the SQLite database.
+    ```bash
+    python Tests/view_database.py
+    ```
 
 ## 🌐 API Endpoints
 
-### .NET API (http://localhost:5001)
-- `GET /` - API information
-- `GET /swagger` - API documentation
-- `GET /api/health` - Health check
-- `POST /api/chat` - Process chat request
-- `GET /api/chat/history` - Get conversation history
-- `GET /api/chat/db-stats` - Database statistics
-
-### Python Backend (http://localhost:8000)
-- `GET /` - Backend information
-- `GET /docs` - API documentation
-- `GET /health` - Health check
-- `POST /chat` - Process RAG request
-
-## 🔍 Troubleshooting
-
-### Common Issues
-
-#### 1. Python Backend Not Starting
-```bash
-# Check if port 8000 is in use
-netstat -ano | findstr :8000
-
-# Kill process if needed
-taskkill /PID <PID> /F
-```
-
-#### 2. .NET API Not Starting
-```bash
-# Check if port 5001 is in use
-netstat -ano | findstr :5001
-
-# Clean and rebuild
-dotnet clean
-dotnet restore
-dotnet build
-```
-
-#### 3. Database Connection Issues
-- Ensure SQLite is working (included with .NET)
-- Check file permissions for `ChatbotDB.db`
-- Verify connection string in `appsettings.json`
-
-#### 4. Timeout Issues
-- Increase timeout in `appsettings.json`
-- Check Python backend performance
-- Monitor vector store initialization
-
-### Debug Steps
-
-1. **Test Python Backend Directly**:
-   ```bash
-   cd Chatbot_RAG_System/Tests
-   python test_python_backend.py
-   ```
-
-2. **Check .NET API Logs**:
-   - Look for detailed error messages in console
-   - Check database creation messages
-
-3. **Verify Database**:
-   ```bash
-   cd Chatbot_RAG_System/Tests
-   python view_database.py
-   ```
-
-4. **Test Individual Components**:
-   - Health check: `curl http://localhost:5001/api/health`
-   - Python health: `curl http://localhost:8000/health`
-
-## 📈 Performance Monitoring
-
-### Response Times
-- **Typical**: 2-5 seconds for first request
-- **Subsequent**: 1-3 seconds (vector store cached)
-- **Timeout**: 60 seconds (configurable)
-
-### Database Performance
-- **SQLite**: Fast for development
-- **Indexes**: On Timestamp and SessionId columns
-- **Storage**: Local file (`ChatbotDB.db`) 
+-   **.NET API**: `http://localhost:5001`
+    -   `GET /swagger`: View interactive API documentation.
+    -   `GET /api/health`: Health check for the API and its connection to the Python backend.
+    -   `POST /api/chat`: Send a chat message.
+-   **Python Backend**: `http://localhost:8000`
+    -   `GET /docs`: View interactive backend API documentation.
+    -   `POST /chat`: The internal endpoint used by the .NET API for RAG processing. 
