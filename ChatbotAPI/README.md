@@ -5,35 +5,37 @@ This is the .NET Web API component of the intelligent chatbot system that integr
 ## Features
 
 - **HTTP POST endpoint** for processing user questions
-- **Database integration** for storing user queries and chatbot responses
+- **SQLite database integration** for storing user queries and chatbot responses (no manual setup required)
 - **Python backend integration** via HTTP communication
-- **Conversation history** retrieval
 - **Health monitoring** for both .NET API and Python backend
 - **Swagger documentation** for API testing
 - **CORS support** for frontend integration
 
 ## Prerequisites
 
-- .NET 8.0 SDK
-- SQL Server (LocalDB, Express, or full version)
-- Python backend running on `http://localhost:8000`
+- .NET 9.0 SDK
+- Python backend running on `http://localhost:8000` (default, configurable)
+- Python 3.11+ (for backend)
 
 ## Setup Instructions
 
 ### 1. Database Setup
 
-1. Open SQL Server Management Studio or use the command line
-2. Run the SQL script located at `../Database/ChatbotDatabase.sql`
-3. This will create the `ChatbotDB` database with the required tables
+**No manual setup required!**
+- The API uses **SQLite** and will automatically create the database file at `Database/ChatbotDB.db` on first run.
+- You do **not** need SQL Server or to run any SQL scripts.
 
 ### 2. Configuration
 
-Update the connection string in `appsettings.json` if needed:
+Update the connection string in `appsettings.json` if needed (default is SQLite):
 
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost;Database=ChatbotDB;Trusted_Connection=true;TrustServerCertificate=true;MultipleActiveResultSets=true"
+    "DefaultConnection": "Data Source=../Database/ChatbotDB.db"
+  },
+  "PythonBackend": {
+    "BaseUrl": "http://localhost:8000" // Change if your Python backend runs elsewhere
   }
 }
 ```
@@ -42,21 +44,16 @@ Update the connection string in `appsettings.json` if needed:
 
 ```bash
 # Navigate to the ChatbotAPI directory
-cd src/ChatbotAPI
+cd ChatbotAPI
 
-# Restore packages
 dotnet restore
-
-# Build the project
 dotnet build
-
-# Run the application
 dotnet run
 ```
 
 The API will be available at:
-- **API Base URL**: `https://localhost:7001` (or `http://localhost:5001`)
-- **Swagger UI**: `https://localhost:7001/swagger`
+- **API Base URL**: `http://localhost:5001` (or `https://localhost:7001`)
+- **Swagger UI**: `http://localhost:5001/swagger`
 
 ## API Endpoints
 
@@ -67,11 +64,12 @@ Process a user question and return an AI response.
 ```json
 {
   "question": "What is the company leave policy?",
-  "sessionId": "session-123",
+  "sessionId": "123e4567-e89b-12d3-a456-426614174000"
 }
 ```
+- `sessionId` should be a valid UUID (Guid). If not provided, the backend will generate a new one for the session.
 
-**Response:**
+**Response Example:**
 ```json
 {
   "queryId": 1,
@@ -79,39 +77,18 @@ Process a user question and return an AI response.
   "response": "Based on the HR policy document, employees are entitled to 20 days of annual leave per year.",
   "questionTimestamp": "2024-01-15T10:30:00Z",
   "responseTimestamp": "2024-01-15T10:30:02Z",
-  "ProcessingTimeSeconds": 15,
+  "processingTimeSeconds": 15,
   "sources": ["HR_Policy_Dataset1.txt"],
   "status": "Success"
 }
 ```
+> **Note:** JSON fields use camelCase by default (e.g., `processingTimeSeconds`).
 
-### GET /api/chat/history
-Retrieve conversation history.
-
-**Query Parameters:**
-- `sessionId` (optional): Filter by session ID
-- `limit` (optional): Maximum number of records (default: 50, max: 100)
-
-**Response:**
-```json
-[
-  {
-    "queryId": 1,
-    "question": "What is the company leave policy?",
-    "response": "Based on the HR policy document...",
-    "questionTimestamp": "2024-01-15T10:30:00Z",
-    "responseTimestamp": "2024-01-15T10:30:02Z",
-    "ProcessingTimeSeconds": 1500,
-    "sources": ["HR_Policy_Dataset1.txt"],
-    "status": "Success"
-  }
-]
-```
 
 ### GET /api/health
 Check the health status of both .NET API and Python backend.
 
-**Response:**
+**Response Example:**
 ```json
 {
   "timestamp": "2024-01-15T10:30:00Z",
@@ -132,7 +109,7 @@ Check the health status of both .NET API and Python backend.
 - `QueryId` (Primary Key)
 - `Question` (User's question)
 - `Timestamp` (When the question was asked)
-- `SessionId` (Optional session tracking)
+- `SessionId` (Session tracking, Guid/UUID)
 - `Status` (Pending, Processing, Completed, Failed)
 
 ### ChatbotResponses Table
@@ -140,7 +117,7 @@ Check the health status of both .NET API and Python backend.
 - `QueryId` (Foreign Key to UserQueries)
 - `Response` (AI-generated response)
 - `Timestamp` (When the response was generated)
-- `ProcessingTimeSeconds` (Time taken to process)
+- `ProcessingTimeSeconds` (Time taken to process, double)
 - `Sources` (JSON array of source documents)
 - `Status` (Success, Error)
 - `ErrorMessage` (Error details if failed)
@@ -173,35 +150,41 @@ CORS is configured to allow requests from common frontend development ports:
 ## Testing
 
 ### Using Swagger UI
-1. Navigate to `https://localhost:7001/swagger`
+1. Navigate to `http://localhost:5001/swagger` (or `https://localhost:7001/swagger`)
 2. Test the endpoints directly from the browser
 
 ### Using curl
 ```bash
 # Send a chat request
-curl -X POST "https://localhost:7001/api/chat" \
+curl -X POST "http://localhost:5001/api/chat" \
   -H "Content-Type: application/json" \
-  -d '{"question": "What is the company leave policy?", "sessionId": "test-session"}'
+  -d '{"question": "What is the company leave policy?", "sessionId": "123e4567-e89b-12d3-a456-426614174000"}'
 
-# Get conversation history
-curl "https://localhost:7001/api/chat/history?limit=10"
 
 # Check health
-curl "https://localhost:7001/api/health"
+curl "http://localhost:5001/api/health"
 ```
+
+### Automated Test Script
+You can run the full system test from the project root:
+```bash
+python Tests/test_api.py
+```
+This will test health, chat, and database endpoints end-to-end.
 
 ## Troubleshooting
 
 ### Common Issues
 
 1. **Database Connection Error**
-   - Ensure SQL Server is running
+   - Ensure the API can write to `Database/ChatbotDB.db`
    - Check connection string in `appsettings.json`
-   - Verify database exists
+   - The database file is created automatically on first run
 
 2. **Python Backend Connection Error**
    - Ensure Python backend is running on `http://localhost:8000`
    - Check Python backend health endpoint
+   - Update `PythonBackend:BaseUrl` in `appsettings.json` if needed
 
 3. **CORS Issues**
    - Update `appsettings.json` with your frontend URL
@@ -222,7 +205,7 @@ The application follows a clean architecture pattern:
 
 ## Dependencies
 
-- **Microsoft.EntityFrameworkCore.SqlServer**: Database access
+- **Microsoft.EntityFrameworkCore.Sqlite**: Database access (SQLite)
 - **Microsoft.AspNetCore.OpenApi**: API documentation
 - **Swashbuckle.AspNetCore**: Swagger UI
 - **System.Text.Json**: JSON serialization 
