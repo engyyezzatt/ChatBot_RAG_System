@@ -2,7 +2,7 @@
 
 This directory contains test scripts for validating the Chatbot System components.
 
-## 📁 Test Files Overview
+##  Test Files Overview
 
 ### `test_api.py`
 **Purpose**: Tests the .NET Web API endpoints
@@ -22,7 +22,7 @@ This directory contains test scripts for validating the Chatbot System component
 - **When to use**: To inspect what data is being stored in the database
 - **Usage**: `python view_database.py`
 
-## 🚀 Quick Test Workflow
+##  Quick Test Workflow
 
 1. **Start the Python Backend**:
    ```bash
@@ -51,7 +51,7 @@ This directory contains test scripts for validating the Chatbot System component
    python view_database.py
    ```
 
-## 🔍 Troubleshooting
+##  Troubleshooting
 
 ### If `test_python_backend.py` fails:
 - Check if Python backend is running on `http://localhost:8000`
@@ -77,7 +77,7 @@ This directory contains test scripts for validating the Chatbot System component
 ✅ Chat request successful
 ✅ Database verification successful
 ✅ History request successful
-🎉 All tests passed!
+   All tests passed!
 ```
 
 ### Successful `test_python_backend.py` run:

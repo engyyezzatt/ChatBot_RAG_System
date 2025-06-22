@@ -2,7 +2,7 @@
 
 A Retrieval-Augmented Generation (RAG) chatbot system built with a .NET API and a Python backend. This project uses local policy documents to provide context-aware answers to user questions.
 
-## 🚀 Core Features
+##  Core Features
 
 -   **.NET 8 Web API**: Handles user interactions, session management, and database storage.
 -   **Python & FastAPI Backend**: Powers the core RAG logic using LangChain and an LLM.
@@ -11,7 +11,7 @@ A Retrieval-Augmented Generation (RAG) chatbot system built with a .NET API and 
 -   **Automated Setup**: Includes scripts to simplify environment setup.
 -   **Comprehensive Testing**: Contains scripts to test the API, backend, and view the database.
 
-## ⚡ Quick Start: Automated vs. Manual Setup
+##  Quick Start: Automated vs. Manual Setup
 
 You can set up and run the project in two ways:
 
@@ -42,7 +42,7 @@ You can set up and run the project in two ways:
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 Chatbot_RAG_System/
@@ -73,7 +73,7 @@ Chatbot_RAG_System/
 -   Python 3.11 (or later)
 -   Git
 
-## 📦 Installation & Setup
+##  Installation & Setup
 
 ### **Option 1: Automated Setup (Windows Only)**
 
@@ -121,7 +121,7 @@ Chatbot_RAG_System/
     cd ..
     ```
 
-## 🚀 Running the Application
+##  Running the Application
 
 Both the Python backend and the .NET API must be running for the system to work.
 
@@ -147,7 +147,7 @@ Both the Python backend and the .NET API must be running for the system to work.
     ```
     The API will be available at `http://localhost:5001`. The SQLite database file (`ChatbotDB.db`) will be created automatically in the `Database` directory the first time the API starts.
 
-## 🧪 Testing & Verification
+##  Testing & Verification
 
 The `Tests` directory contains scripts to verify that the system is working correctly.
 
@@ -163,7 +163,7 @@ The `Tests` directory contains scripts to verify that the system is working corr
     python Tests/view_database.py
     ```
 
-## 🌐 API Endpoints
+##  API Endpoints
 
 -   **.NET API**: `http://localhost:5001`
     -   `GET /swagger`: View interactive API documentation.
