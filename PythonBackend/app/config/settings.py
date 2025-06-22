@@ -4,7 +4,7 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     # Ollama Configuration
     ollama_base_url: str = "http://localhost:11434"
-    ollama_model: str = "llama3"  # You can change this to "llama3" if you have it installed
+    ollama_model: str = "llama3"  
     
     # Document Processing
     docs_directory: str = "docs"
