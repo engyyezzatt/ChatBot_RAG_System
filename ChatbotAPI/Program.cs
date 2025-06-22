@@ -25,8 +25,9 @@ builder.Services.AddCors(options =>
 });
 
 // Configure Entity Framework with SQLite
+var dbPath = Path.GetFullPath(Path.Combine(builder.Environment.ContentRootPath, "..", "Database", "ChatbotDB.db"));
 builder.Services.AddDbContext<ChatbotDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlite($"Data Source={dbPath}"));
 
 // Configure Python Backend Service
 builder.Services.Configure<PythonBackendConfig>(
@@ -82,7 +83,9 @@ using (var scope = app.Services.CreateScope())
     {
         context.Database.EnsureCreated();
         Console.WriteLine("SQLite database created successfully or already exists.");
-        Console.WriteLine($"Database file location: {Path.GetFullPath("ChatbotDB.db")}");
+        
+        var connection = context.Database.GetDbConnection();
+        Console.WriteLine($"Database file location: {connection.DataSource}");
     }
     catch (Exception ex)
     {
