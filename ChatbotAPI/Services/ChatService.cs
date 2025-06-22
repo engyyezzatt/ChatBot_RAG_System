@@ -35,7 +35,6 @@ public class ChatService : IChatService
             {
                 Question = request.Question,
                 SessionId = request.SessionId,
-                UserId = request.UserId,
                 Status = "Processing"
             };
             
@@ -48,14 +47,14 @@ public class ChatService : IChatService
             var pythonResponse = await _pythonBackendService.SendChatRequestAsync(request.Question);
             
             stopwatch.Stop();
-            var processingTimeMs = (int)stopwatch.ElapsedMilliseconds;
+            double processingTimeSeconds = stopwatch.Elapsed.TotalSeconds;
             
             // 3. Save chatbot response to database
             var chatbotResponse = new ChatbotResponse
             {
                 QueryId = userQuery.QueryId,
                 Response = pythonResponse.Response,
-                ProcessingTimeMs = processingTimeMs,
+                ProcessingTimeSeconds = processingTimeSeconds,
                 Sources = pythonResponse.Sources != null ? JsonSerializer.Serialize(pythonResponse.Sources) : null,
                 Status = "Success"
             };
@@ -67,7 +66,7 @@ public class ChatService : IChatService
             
             await _context.SaveChangesAsync();
             
-            _logger.LogInformation("Successfully processed chat request. Processing time: {ProcessingTimeMs}ms", processingTimeMs);
+            _logger.LogInformation("Successfully processed chat request. Processing time: {ProcessingTimeSeconds}s", processingTimeSeconds);
             
             // 4. Return response DTO
             return new ChatResponseDto
@@ -77,7 +76,7 @@ public class ChatService : IChatService
                 Response = chatbotResponse.Response,
                 QuestionTimestamp = userQuery.Timestamp,
                 ResponseTimestamp = chatbotResponse.Timestamp,
-                ProcessingTimeMs = chatbotResponse.ProcessingTimeMs,
+                ProcessingTimeSeconds = chatbotResponse.ProcessingTimeSeconds,
                 Sources = pythonResponse.Sources,
                 Status = chatbotResponse.Status
             };
@@ -85,7 +84,7 @@ public class ChatService : IChatService
         catch (Exception ex)
         {
             stopwatch.Stop();
-            var processingTimeMs = (int)stopwatch.ElapsedMilliseconds;
+            double processingTimeSeconds = stopwatch.Elapsed.TotalSeconds;
             
             _logger.LogError(ex, "Error processing chat request: {Question}", request.Question);
             
@@ -104,7 +103,7 @@ public class ChatService : IChatService
                     {
                         QueryId = userQuery.QueryId,
                         Response = "Sorry, I encountered an error while processing your request. Please try again.",
-                        ProcessingTimeMs = processingTimeMs,
+                        ProcessingTimeSeconds = processingTimeSeconds,
                         Status = "Error",
                         ErrorMessage = ex.Message
                     };
@@ -119,7 +118,7 @@ public class ChatService : IChatService
                         Response = errorResponse.Response,
                         QuestionTimestamp = userQuery.Timestamp,
                         ResponseTimestamp = errorResponse.Timestamp,
-                        ProcessingTimeMs = errorResponse.ProcessingTimeMs,
+                        ProcessingTimeSeconds = errorResponse.ProcessingTimeSeconds,
                         Status = errorResponse.Status,
                         ErrorMessage = errorResponse.ErrorMessage
                     };
@@ -155,7 +154,7 @@ public class ChatService : IChatService
                 Response = q.Response != null ? q.Response.Response : string.Empty,
                 QuestionTimestamp = q.Timestamp,
                 ResponseTimestamp = q.Response != null ? q.Response.Timestamp : q.Timestamp,
-                ProcessingTimeMs = q.Response != null ? q.Response.ProcessingTimeMs : null,
+                ProcessingTimeSeconds = q.Response != null ? q.Response.ProcessingTimeSeconds : null,
                 Sources = q.Response != null && q.Response.Sources != null ? JsonSerializer.Deserialize<List<string>>(q.Response.Sources) : null,
                 Status = q.Response != null ? q.Response.Status : "Pending",
                 ErrorMessage = q.Response != null ? q.Response.ErrorMessage : null

@@ -19,7 +19,7 @@ public class ChatbotResponse
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
     public DateTime Timestamp { get; set; }
     
-    public int? ProcessingTimeMs { get; set; }
+    public double? ProcessingTimeSeconds { get; set; }
     
     public string? Sources { get; set; } // JSON array of source documents
     

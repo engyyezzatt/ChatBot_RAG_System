@@ -88,7 +88,7 @@ public class ChatController : ControllerBase
                     r.QueryId,
                     r.Response,
                     r.Timestamp,
-                    r.ProcessingTimeMs,
+                    r.ProcessingTimeSeconds,
                     r.Status
                 })
                 .ToListAsync();

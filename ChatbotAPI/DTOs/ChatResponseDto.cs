@@ -7,7 +7,7 @@ public class ChatResponseDto
     public string Response { get; set; } = string.Empty;
     public DateTime QuestionTimestamp { get; set; }
     public DateTime ResponseTimestamp { get; set; }
-    public int? ProcessingTimeMs { get; set; }
+    public double? ProcessingTimeSeconds { get; set; }
     public List<string>? Sources { get; set; }
     public string Status { get; set; } = "Success";
     public string? ErrorMessage { get; set; }

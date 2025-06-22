@@ -23,7 +23,6 @@ public class ChatbotDbContext : DbContext
             entity.Property(e => e.Question).IsRequired().HasMaxLength(2000);
             entity.Property(e => e.Timestamp).HasDefaultValueSql("CURRENT_TIMESTAMP");
             entity.Property(e => e.SessionId).HasMaxLength(100);
-            entity.Property(e => e.UserId).HasMaxLength(100);
             entity.Property(e => e.Status).HasMaxLength(20).HasDefaultValue("Pending");
             
             // Create index on Timestamp

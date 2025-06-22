@@ -124,7 +124,7 @@ class ChatbotAPITester:
                 print(f"✅ Chat request successful")
                 print(f"   Query ID: {chat_data.get('queryId')}")
                 print(f"   Response: {chat_data.get('response', '')[:100]}...")
-                print(f"   Processing Time: {chat_data.get('processingTimeMs')}ms")
+                print(f"   Processing Time: {chat_data.get('ProcessingTimeSeconds')}ms")
                 print(f"   Status: {chat_data.get('status')}")
                 return True
             else:

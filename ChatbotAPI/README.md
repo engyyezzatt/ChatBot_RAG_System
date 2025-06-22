@@ -68,7 +68,6 @@ Process a user question and return an AI response.
 {
   "question": "What is the company leave policy?",
   "sessionId": "session-123",
-  "userId": "user-456"
 }
 ```
 
@@ -80,7 +79,7 @@ Process a user question and return an AI response.
   "response": "Based on the HR policy document, employees are entitled to 20 days of annual leave per year.",
   "questionTimestamp": "2024-01-15T10:30:00Z",
   "responseTimestamp": "2024-01-15T10:30:02Z",
-  "processingTimeMs": 1500,
+  "ProcessingTimeSeconds": 15,
   "sources": ["HR_Policy_Dataset1.txt"],
   "status": "Success"
 }
@@ -102,7 +101,7 @@ Retrieve conversation history.
     "response": "Based on the HR policy document...",
     "questionTimestamp": "2024-01-15T10:30:00Z",
     "responseTimestamp": "2024-01-15T10:30:02Z",
-    "processingTimeMs": 1500,
+    "ProcessingTimeSeconds": 1500,
     "sources": ["HR_Policy_Dataset1.txt"],
     "status": "Success"
   }
@@ -134,7 +133,6 @@ Check the health status of both .NET API and Python backend.
 - `Question` (User's question)
 - `Timestamp` (When the question was asked)
 - `SessionId` (Optional session tracking)
-- `UserId` (Optional user identification)
 - `Status` (Pending, Processing, Completed, Failed)
 
 ### ChatbotResponses Table
@@ -142,7 +140,7 @@ Check the health status of both .NET API and Python backend.
 - `QueryId` (Foreign Key to UserQueries)
 - `Response` (AI-generated response)
 - `Timestamp` (When the response was generated)
-- `ProcessingTimeMs` (Time taken to process)
+- `ProcessingTimeSeconds` (Time taken to process)
 - `Sources` (JSON array of source documents)
 - `Status` (Success, Error)
 - `ErrorMessage` (Error details if failed)

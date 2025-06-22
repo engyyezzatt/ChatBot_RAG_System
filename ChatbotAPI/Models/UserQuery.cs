@@ -20,9 +20,6 @@ public class UserQuery
     [MaxLength(100)]
     public string? SessionId { get; set; }
     
-    [MaxLength(100)]
-    public string? UserId { get; set; }
-    
     [MaxLength(20)]
     public string Status { get; set; } = "Pending";
     

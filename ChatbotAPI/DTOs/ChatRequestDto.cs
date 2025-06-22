@@ -11,6 +11,5 @@ public class ChatRequestDto
     [StringLength(100)]
     public string? SessionId { get; set; }
     
-    [StringLength(100)]
-    public string? UserId { get; set; }
+    
 } 

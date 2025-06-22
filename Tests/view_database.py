@@ -66,7 +66,7 @@ class DatabaseViewer:
         try:
             cursor = conn.cursor()
             cursor.execute("""
-                SELECT QueryId, Question, Timestamp, SessionId, UserId, Status
+                SELECT QueryId, Question, Timestamp, SessionId, Status
                 FROM UserQueries 
                 ORDER BY Timestamp DESC 
                 LIMIT ?
@@ -79,7 +79,6 @@ class DatabaseViewer:
                     'Question': row['Question'],
                     'Timestamp': row['Timestamp'],
                     'SessionId': row['SessionId'],
-                    'UserId': row['UserId'],
                     'Status': row['Status']
                 })
             
@@ -99,7 +98,7 @@ class DatabaseViewer:
         try:
             cursor = conn.cursor()
             cursor.execute("""
-                SELECT ResponseId, QueryId, Response, Timestamp, ProcessingTimeMs, Sources, Status, ErrorMessage
+                SELECT ResponseId, QueryId, Response, Timestamp, ProcessingTimeSeconds, Sources, Status, ErrorMessage
                 FROM ChatbotResponses 
                 ORDER BY Timestamp DESC 
                 LIMIT ?
@@ -112,7 +111,7 @@ class DatabaseViewer:
                     'QueryId': row['QueryId'],
                     'Response': row['Response'][:100] + "..." if len(row['Response']) > 100 else row['Response'],
                     'Timestamp': row['Timestamp'],
-                    'ProcessingTimeMs': row['ProcessingTimeMs'],
+                    'ProcessingTimeSeconds': row['ProcessingTimeSeconds'],
                     'Sources': row['Sources'],
                     'Status': row['Status'],
                     'ErrorMessage': row['ErrorMessage']
@@ -139,10 +138,9 @@ class DatabaseViewer:
                     q.Question,
                     q.Timestamp AS QuestionTimestamp,
                     q.SessionId,
-                    q.UserId,
                     r.Response,
                     r.Timestamp AS ResponseTimestamp,
-                    r.ProcessingTimeMs,
+                    r.ProcessingTimeSeconds,
                     r.Sources,
                     r.Status AS ResponseStatus
                 FROM UserQueries q
@@ -158,10 +156,9 @@ class DatabaseViewer:
                     'Question': row['Question'],
                     'QuestionTimestamp': row['QuestionTimestamp'],
                     'SessionId': row['SessionId'],
-                    'UserId': row['UserId'],
                     'Response': row['Response'][:100] + "..." if row['Response'] and len(row['Response']) > 100 else row['Response'],
                     'ResponseTimestamp': row['ResponseTimestamp'],
-                    'ProcessingTimeMs': row['ProcessingTimeMs'],
+                    'ProcessingTimeSeconds': row['ProcessingTimeSeconds'],
                     'Sources': row['Sources'],
                     'ResponseStatus': row['ResponseStatus']
                 })
@@ -207,7 +204,7 @@ class DatabaseViewer:
                 print(f"   Asked: {conv['QuestionTimestamp']}")
                 if conv['Response']:
                     print(f"   Response: {conv['Response']}")
-                    print(f"   Processing Time: {conv['ProcessingTimeMs']}ms")
+                    print(f"   Processing Time: {conv['ProcessingTimeSeconds']}ms")
                     print(f"   Status: {conv['ResponseStatus']}")
                 else:
                     print("   Response: Pending")
@@ -262,7 +259,7 @@ def main():
                     print(f"{i}. Query: {conv['Question'][:50]}...")
                     if conv['Response']:
                         print(f"   Response: {conv['Response']}")
-                        print(f"   Processing: {conv['ProcessingTimeMs']}ms")
+                        print(f"   Processing: {conv['ProcessingTimeSeconds']}ms")
                     else:
                         print("   Response: Pending")
                     print()
