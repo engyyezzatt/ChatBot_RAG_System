@@ -55,34 +55,6 @@ public class ChatController : ControllerBase
         }
     }
 
-    // /// <summary>
-    // /// Get conversation history for a specific session or all conversations
-    // /// </summary>
-    // /// <param name="sessionId">Optional session ID to filter conversations</param>
-    // /// <param name="limit">Maximum number of conversations to return (default: 50)</param>
-    // /// <returns>List of conversation history</returns>
-    // [HttpGet("history")]
-    // public async Task<ActionResult<IEnumerable<ChatResponseDto>>> GetConversationHistory(
-    //     [FromQuery] string? sessionId = null,
-    //     [FromQuery] int limit = 50)
-    // {
-    //     try
-    //     {
-    //         if (limit <= 0 || limit > 100)
-    //         {
-    //             return BadRequest(new { error = "Limit must be between 1 and 100" });
-    //         }
-
-    //         var history = await _chatService.GetConversationHistoryAsync(sessionId, limit);
-            
-    //         return Ok(history);
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         _logger.LogError(ex, "Error retrieving conversation history");
-    //         return StatusCode(500, new { error = "An error occurred while retrieving conversation history." });
-    //     }
-    // }
 
     /// <summary>
     /// Test database connection and get database statistics
