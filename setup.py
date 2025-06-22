@@ -62,7 +62,7 @@ def install_requirements():
 
 def main():
     """Main setup function."""
-    print("🚀 Setting up Chatbot RAG System...")
+    print(" Setting up Chatbot RAG System...")
     print("=" * 50)
     
     # Check if we're in the right directory
