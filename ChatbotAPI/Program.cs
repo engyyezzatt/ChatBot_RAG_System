@@ -62,8 +62,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Health check endpoint
-app.MapGet("/", () => new
+// Info check endpoint
+app.MapGet("/info", () => new
 {
     message = "Chatbot API",
     version = "1.0.0",
