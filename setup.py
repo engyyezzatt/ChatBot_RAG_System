@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Setup script for Chatbot RAG System
 This script helps set up the Python environment and install dependencies.
