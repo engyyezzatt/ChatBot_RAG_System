@@ -201,7 +201,7 @@ class ChatbotAPITester:
         tests = [
             ("Health Check", self.test_health_endpoint),
             ("Database Connection", self.test_database_storage),
-            ("Chat Request", lambda: self.test_chat_endpoint("What is the company leave policy?")),
+            ("Chat Request", lambda: self.test_chat_endpoint("What is the company anti-harresment policy?")),
             ("Database Storage Verification", self.test_database_after_chat),
             ("History Request", lambda: self.test_history_endpoint(3))
         ]

@@ -12,11 +12,11 @@ import os
 
 class DatabaseViewer:
     def __init__(self, db_path: str = None):
-        # Look for the database file in the ChatbotAPI directory
+        # Look for the database file in the Database directory
         if db_path is None:
             # Try to find the database file relative to this script
             script_dir = os.path.dirname(os.path.abspath(__file__))
-            db_path = os.path.join(script_dir, "..", "ChatbotAPI", "ChatbotDB.db")
+            db_path = os.path.join(script_dir, "..", "Database", "ChatbotDB.db")
         
         self.db_path = db_path
     
