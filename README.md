@@ -47,7 +47,7 @@ This project includes a setup script to automate the Python environment creation
 
 1.  **Clone the Repository**
     ```bash
-    git clone https://github.com/yourusername/Chatbot_RAG_System.git
+    git clone https://github.com/engyyezzatt/ChatBot_RAG_System.git
     cd Chatbot_RAG_System
     ```
 
