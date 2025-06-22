@@ -2,7 +2,6 @@ import logging
 import re
 from typing import List, Optional, Tuple
 import warnings
-# Try new import first, fallback to old import
 
 from langchain_community.llms import Ollama as OllamaLLM
 from langchain.chains import RetrievalQA
@@ -34,7 +33,7 @@ class RAGService:
             return OllamaLLM(
                 base_url=settings.ollama_base_url,
                 model=settings.ollama_model,
-                temperature=0.7
+                temperature=0.5
             )
         except Exception as e:
             self.logger.error(f"Error initializing Ollama LLM: {str(e)}")

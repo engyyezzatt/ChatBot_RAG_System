@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 SQLite Database Viewer for Chatbot API
 This script allows you to view the contents of the ChatbotDB.db file
@@ -173,7 +172,7 @@ class DatabaseViewer:
     def print_database_summary(self):
         """Print a summary of the database contents"""
         print("=" * 80)
-        print("📊 CHATBOT DATABASE SUMMARY")
+        print("CHATBOT DATABASE SUMMARY")
         print("=" * 80)
         
         # Get table info
@@ -184,19 +183,19 @@ class DatabaseViewer:
             print("   Make sure the .NET API has been run at least once to create the database.")
             return
         
-        print(f"📁 Database file: {self.db_path}")
-        print(f"📋 Tables found: {len(table_info)}")
+        print(f"Database file: {self.db_path}")
+        print(f"Tables found: {len(table_info)}")
         print()
         
         for table_name, count in table_info.items():
-            print(f"   📄 {table_name}: {count} records")
+            print(f"  {table_name}: {count} records")
         
         print()
         
         # Show recent conversations
         conversations = self.view_conversation_history(5)
         if conversations:
-            print("🔄 RECENT CONVERSATIONS:")
+            print("RECENT CONVERSATIONS:")
             print("-" * 80)
             for i, conv in enumerate(conversations, 1):
                 print(f"{i}. Query ID: {conv['QueryId']}")
@@ -210,7 +209,7 @@ class DatabaseViewer:
                     print("   Response: Pending")
                 print()
         else:
-            print("📝 No conversations found in database")
+            print("No conversations found in database")
         
         print("=" * 80)
 
@@ -223,20 +222,20 @@ def main():
         
         # Interactive menu
         while True:
-            print("\n🔍 What would you like to view?")
+            print("\nWhat would you like to view?")
             print("1. Database Summary")
             print("2. Recent User Queries (10)")
             print("3. Recent Chatbot Responses (10)")
             print("4. Conversation History (10)")
             print("5. Exit")
             
-            choice = input("\nEnter your choice (1-5): ").strip()
+            choice = input("\n Enter your choice (1-5): ").strip()
             
             if choice == "1":
                 viewer.print_database_summary()
             elif choice == "2":
                 queries = viewer.view_user_queries(10)
-                print("\n📝 RECENT USER QUERIES:")
+                print("\nRECENT USER QUERIES:")
                 print("-" * 60)
                 for i, query in enumerate(queries, 1):
                     print(f"{i}. ID: {query['QueryId']} | {query['Question'][:50]}...")
@@ -244,7 +243,7 @@ def main():
                     print()
             elif choice == "3":
                 responses = viewer.view_chatbot_responses(10)
-                print("\n🤖 RECENT CHATBOT RESPONSES:")
+                print("\n RECENT CHATBOT RESPONSES:")
                 print("-" * 60)
                 for i, response in enumerate(responses, 1):
                     print(f"{i}. ID: {response['ResponseId']} | Query: {response['QueryId']}")
@@ -253,7 +252,7 @@ def main():
                     print()
             elif choice == "4":
                 conversations = viewer.view_conversation_history(10)
-                print("\n🔄 CONVERSATION HISTORY:")
+                print("\n CONVERSATION HISTORY:")
                 print("-" * 60)
                 for i, conv in enumerate(conversations, 1):
                     print(f"{i}. Query: {conv['Question'][:50]}...")
@@ -264,13 +263,13 @@ def main():
                         print("   Response: Pending")
                     print()
             elif choice == "5":
-                print("👋 Goodbye!")
+                print("Closes")
                 break
             else:
                 print("❌ Invalid choice. Please enter 1-5.")
                 
     except KeyboardInterrupt:
-        print("\n\n👋 Goodbye!")
+        print("\n\n  Closed!")
     except Exception as e:
         print(f"\n❌ Error: {e}")
 

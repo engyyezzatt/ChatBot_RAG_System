@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Test script to directly test the Python backend
 This helps isolate whether the issue is with the .NET API or the Python backend
@@ -12,7 +11,7 @@ def test_python_backend():
     """Test the Python backend directly"""
     base_url = "http://localhost:8000"
     
-    print("🔍 Testing Python Backend Directly")
+    print("Testing Python Backend Directly")
     print("=" * 50)
     
     # Test 1: Health check
@@ -73,7 +72,7 @@ def test_python_backend():
 
 def main():
     """Main function"""
-    print("🚀 Python Backend Direct Test")
+    print("Python Backend Direct Test")
     print("=" * 50)
     print("This test bypasses the .NET API and tests the Python backend directly.")
     print("If this fails, the issue is with the Python backend.")
@@ -85,10 +84,10 @@ def main():
     print("\n" + "=" * 50)
     if success:
         print("✅ Python backend is working correctly!")
-        print("💡 The issue might be with the .NET API communication.")
+        print("The issue might be with the .NET API communication.")
     else:
-        print("❌ Python backend has issues!")
-        print("💡 Please check:")
+        print("Python backend has issues!")
+        print("Please check:")
         print("   1. Is the Python backend running? (python -m uvicorn app.main:app --reload)")
         print("   2. Is it running on http://localhost:8000?")
         print("   3. Are there any error messages in the Python backend console?")

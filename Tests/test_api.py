@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Test script for the .NET Chatbot API
 This script tests the main endpoints of the .NET API
@@ -35,7 +34,7 @@ class ChatbotAPITester:
             "https://localhost:5001"  # Fallback - HTTPS on 5001
         ]
         
-        print("🔍 Looking for .NET API...")
+        print("Looking for .NET API...")
         
         for url in test_urls:
             try:
@@ -44,7 +43,7 @@ class ChatbotAPITester:
                     print(f"✅ Found API at {url}")
                     return url
                 else:
-                    print(f"⚠️  {url} responded with status {response.status_code}")
+                    print(f"{url} responded with status {response.status_code}")
             except requests.exceptions.ConnectionError:
                 # Connection refused - API not running on this port
                 continue
@@ -56,7 +55,7 @@ class ChatbotAPITester:
                 continue
         
         # Default to the primary URL if none work
-        print("⚠️  API not detected, using default: http://localhost:5001")
+        print("API not detected, using default: http://localhost:5001")
         return "http://localhost:5001"
     
     def test_health_endpoint(self) -> bool:
@@ -217,11 +216,11 @@ def main():
     try:
         success = tester.run_full_test()
         if success:
-            print("🎉 All tests passed! The .NET API is working correctly.")
+            print("✅ All tests passed! The .NET API is working correctly.")
             print("✅ Database storage is working - user queries and responses are being saved!")
         else:
-            print("⚠️  Some tests failed. Please check the API and try again.")
-            print("\n💡 Troubleshooting tips:")
+            print("  Some tests failed. Please check the API and try again.")
+            print("\n Troubleshooting tips:")
             print("   1. Make sure the .NET API is running (dotnet run)")
             print("   2. Check the console output for the correct port")
             print("   3. Ensure the Python backend is running on http://localhost:8000")
