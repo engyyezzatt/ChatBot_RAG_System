@@ -29,14 +29,14 @@ public class PythonBackendService : IPythonBackendService
         };
     }
 
-    public async Task<PythonChatResponse> SendChatRequestAsync(string question)
+    public async Task<PythonChatResponse> SendChatRequestAsync(string question, Guid sessionId)
     {
         try
         {
             _logger.LogInformation("Sending chat request to Python backend: {Question}", question);
             _logger.LogInformation("Python backend URL: {BaseUrl}", _httpClient.BaseAddress);
             
-            var request = new PythonChatRequest { Question = question };
+            var request = new PythonChatRequest { Question = question, SessionId = sessionId };
             var json = JsonSerializer.Serialize(request, _jsonOptions);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             

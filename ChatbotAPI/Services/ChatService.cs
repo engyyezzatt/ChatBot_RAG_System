@@ -34,7 +34,7 @@ public class ChatService : IChatService
             var userQuery = new UserQuery
             {
                 Question = request.Question,
-                SessionId = request.SessionId,
+                SessionId = request.SessionId ?? Guid.NewGuid(),
                 Status = "Processing"
             };
             
@@ -44,7 +44,7 @@ public class ChatService : IChatService
             _logger.LogInformation("Saved user query to database with ID: {QueryId}", userQuery.QueryId);
             
             // 2. Send request to Python backend
-            var pythonResponse = await _pythonBackendService.SendChatRequestAsync(request.Question);
+            var pythonResponse = await _pythonBackendService.SendChatRequestAsync(request.Question, userQuery.SessionId);
             
             stopwatch.Stop();
             double processingTimeSeconds = stopwatch.Elapsed.TotalSeconds;
@@ -129,7 +129,7 @@ public class ChatService : IChatService
         }
     }
 
-    public async Task<IEnumerable<ChatResponseDto>> GetConversationHistoryAsync(string? sessionId = null, int limit = 50)
+    public async Task<IEnumerable<ChatResponseDto>> GetConversationHistoryAsync(Guid? sessionId = null, int limit = 50)
     {
         try
         {
@@ -137,9 +137,9 @@ public class ChatService : IChatService
                 .Include(q => q.Response)
                 .AsQueryable();
             
-            if (!string.IsNullOrEmpty(sessionId))
+            if (sessionId.HasValue)
             {
-                query = query.Where(q => q.SessionId == sessionId);
+                query = query.Where(q => q.SessionId == sessionId.Value);
             }
             
             var conversations = await query

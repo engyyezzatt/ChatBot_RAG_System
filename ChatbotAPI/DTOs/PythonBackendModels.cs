@@ -7,6 +7,9 @@ public class PythonChatRequest
 {
     [JsonPropertyName("question")]
     public string Question { get; set; } = string.Empty;
+
+    [JsonPropertyName("session_id")]
+    public Guid SessionId { get; set; }
 }
 
 public class PythonChatResponse

@@ -17,8 +17,7 @@ public class UserQuery
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
     public DateTime Timestamp { get; set; }
     
-    [MaxLength(100)]
-    public string? SessionId { get; set; }
+    public Guid SessionId { get; set; } = Guid.NewGuid();
     
     [MaxLength(20)]
     public string Status { get; set; } = "Pending";

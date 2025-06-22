@@ -8,8 +8,7 @@ public class ChatRequestDto
     [StringLength(2000, MinimumLength = 1, ErrorMessage = "Question must be between 1 and 2000 characters")]
     public string Question { get; set; } = string.Empty;
     
-    [StringLength(100)]
-    public string? SessionId { get; set; }
+    public Guid? SessionId { get; set; }
     
     
 } 

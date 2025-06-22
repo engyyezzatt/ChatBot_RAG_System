@@ -4,6 +4,6 @@ namespace ChatbotAPI.Services;
 
 public interface IPythonBackendService
 {
-    Task<PythonChatResponse> SendChatRequestAsync(string question);
+    Task<PythonChatResponse> SendChatRequestAsync(string question, Guid sessionId);
     Task<PythonHealthResponse> GetHealthStatusAsync();
 } 

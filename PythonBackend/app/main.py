@@ -85,7 +85,8 @@ async def chat_endpoint(
         
         response = ChatResponse(
             response=answer,
-            sources=sources if sources else None
+            sources=sources if sources else None,
+            session_id=request.session_id
         )
         
         logger.info(f"Successfully processed chat request")
