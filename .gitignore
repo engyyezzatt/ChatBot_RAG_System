@@ -187,14 +187,9 @@ obj/
 *.temp
 
 # Database
-*.db
 *.sqlite
 *.sqlite3
 
-# Vector store files
-vector_store/
-*.bin
-*.index
 
 # API Keys and sensitive data
 appsettings.Development.json
