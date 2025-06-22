@@ -1,4 +1,4 @@
-# 🧪 Test Files
+#  Test Files
 
 This directory contains test scripts for validating the Chatbot System components.
 

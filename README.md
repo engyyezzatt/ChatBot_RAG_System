@@ -67,9 +67,9 @@ Chatbot_RAG_System/
 └── README.md
 ```
 
-## 🛠️ Prerequisites
+##  Prerequisites
 
--   .NET 8 SDK (or later)
+-   .NET 9 SDK 
 -   Python 3.11 (or later)
 -   Git
 
