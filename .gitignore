@@ -188,7 +188,7 @@ obj/
 
 # Database
 *.sqlite
-*.sqlite3
+
 
 
 # API Keys and sensitive data
