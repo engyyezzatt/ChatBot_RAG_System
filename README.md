@@ -4,7 +4,7 @@ A Retrieval-Augmented Generation (RAG) chatbot system built with a .NET API and 
 
 ##  Core Features
 
--   **.NET 8 Web API**: Handles user interactions, session management, and database storage.
+-   **.NET 9 Web API**: Handles user interactions, session management, and database storage.
 -   **Python & FastAPI Backend**: Powers the core RAG logic using LangChain and an LLM.
 -   **SQLite Database**: Stores conversation history for easy retrieval and review.
 -   **Vector Storage**: Uses ChromaDB to store document embeddings for efficient retrieval.
